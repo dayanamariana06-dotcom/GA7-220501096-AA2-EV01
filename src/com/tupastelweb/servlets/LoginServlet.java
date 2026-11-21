@@ -23,35 +23,36 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doPost(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
 
-        String correo = request.getParameter("correo");
-        String contrasena = request.getParameter("contrasena");
+    String correo = request.getParameter("correo");
+    String contrasena = request.getParameter("contrasena");
 
-        try (PrintWriter out = response.getWriter()) {
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-            out.println("<html><body>");
+    try (PrintWriter out = response.getWriter()) {
 
-            if ("cliente@tupastelweb.com".equals(correo)
-                    && "123456".equals(contrasena)) {
+        out.println("<html><body>");
 
-                out.println("<h1>¡Bienvenido a TuPastelWeb!</h1>");
-                out.println("<p>Inicio de sesión exitoso.</p>");
+        if (usuarioDAO.validar(correo, contrasena)) {
 
-            } else {
+            out.println("<h1>¡Bienvenido a TuPastelWeb!</h1>");
+            out.println("<p>Inicio de sesión exitoso.</p>");
 
-                out.println("<h1>Error de autenticación</h1>");
-                out.println("<p>El correo o la contraseña son incorrectos.</p>");
-                out.println("<a href='login.jsp'>Intentar nuevamente</a>");
-            }
+        } else {
 
-            out.println("</body></html>");
+            out.println("<h1>Error de autenticación</h1>");
+            out.println("<p>El correo o la contraseña son incorrectos.</p>");
+            out.println("<a href='login.jsp'>Intentar nuevamente</a>");
+
         }
+
+        out.println("</body></html>");
     }
 }
-
+}

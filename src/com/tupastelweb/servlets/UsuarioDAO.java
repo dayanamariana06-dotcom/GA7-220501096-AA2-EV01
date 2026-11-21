@@ -82,4 +82,45 @@ public class UsuarioDAO {
             return false;
         }
     }
+    // Validar inicio de sesión
+public boolean validar(String correo, String contrasena) {
+
+    String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
+
+    try (Connection conexion = Conexion.conectar();
+         PreparedStatement consulta = conexion.prepareStatement(sql)) {
+
+        consulta.setString(1, correo);
+        consulta.setString(2, contrasena);
+
+        try (ResultSet resultado = consulta.executeQuery()) {
+            return resultado.next();
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al validar usuario: " + e.getMessage());
+        return false;
+    }
+}
+ // Consultar el ID de un usuario por su correo
+    public int consultarIdPorCorreo(String correo) {
+        String sql = "SELECT id FROM usuarios WHERE correo = ?";
+
+        try (Connection conexion = Conexion.conectar();
+             PreparedStatement consulta = conexion.prepareStatement(sql)) {
+
+            consulta.setString(1, correo);
+
+            try (ResultSet resultado = consulta.executeQuery()) {
+                if (resultado.next()) {
+                    return resultado.getInt("id");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al consultar ID: " + e.getMessage());
+        }
+
+        return -1;
+    }
 }

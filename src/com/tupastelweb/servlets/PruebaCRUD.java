@@ -6,37 +6,50 @@ public class PruebaCRUD {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        // Registrar un usuario de prueba
+        String correoPrueba = "prueba.crud@gmail.com";
+
+        // 1. Insertar usuario
         boolean registrado = usuarioDAO.insertar(
             "Usuario Prueba",
-            "prueba.crud@gmail.com",
+            correoPrueba,
             "Temporal123"
         );
 
-        System.out.println("Registro: " + registrado);
+        System.out.println("REGISTRO: " + registrado);
 
-        // Consultar usuarios
-        System.out.println("Lista de usuarios:");
+        // 2. Consultar usuarios
+        System.out.println("CONSULTA DE USUARIOS:");
         usuarioDAO.consultar();
 
-        // Actualizar usuario
-        boolean actualizado = usuarioDAO.actualizar(
-            9,
-            "Usuario Actualizado",
-            "prueba.crud@gmail.com"
-        );
+        // 3. Buscar el ID del usuario de prueba
+        int idUsuario = usuarioDAO.consultarIdPorCorreo(correoPrueba);
 
-        System.out.println("Actualización: " + actualizado);
+        System.out.println("ID DEL USUARIO: " + idUsuario);
 
-        // Consultar nuevamente
-        usuarioDAO.consultar();
+        // 4. Actualizar usuario
+        if (idUsuario != -1) {
 
-        // Eliminar usuario de prueba
-        boolean eliminado = usuarioDAO.eliminar(9);
+            boolean actualizado = usuarioDAO.actualizar(
+                idUsuario,
+                "Usuario Actualizado",
+                correoPrueba
+            );
 
-        System.out.println("Eliminación: " + eliminado);
+            System.out.println("ACTUALIZACION: " + actualizado);
 
-        // Consultar nuevamente
-        usuarioDAO.consultar();
+            // 5. Consultar después de actualizar
+            usuarioDAO.consultar();
+
+            // 6. Eliminar usuario de prueba
+            boolean eliminado = usuarioDAO.eliminar(idUsuario);
+
+            System.out.println("ELIMINACION: " + eliminado);
+
+            // 7. Consultar después de eliminar
+            usuarioDAO.consultar();
+
+        } else {
+            System.out.println("No se encontro el usuario de prueba.");
+        }
     }
 }
